@@ -1,4 +1,4 @@
-# Temperature sensor over 433 Mhz
+# Temperature sensor over 433 MHz
 
 ## Project description
 Project for Arduino hardware for sending temperature and humidity readings via 433MHz radio. Second Arduino based appliance is receiving the data and sending to the Internet connected unit via serial port.

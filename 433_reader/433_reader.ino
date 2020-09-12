@@ -1,3 +1,10 @@
+/*
+ * Arduino receiving data via
+ * XLC-RF-5V reciever with VirtualWire protocol.
+ * Program must run i a loop, so no delays or putting the uC into
+ * any power saving mode is possible.
+*/
+
 #include <VirtualWire.h> // https://www.airspayce.com/mikem/arduino/VirtualWire/
 
 #define RADIO 2 // Arduino digital pin for XLC-RF-5V data
@@ -16,6 +23,8 @@ void setup()
 void loop()
 {
   // częśc wymagana do poprawnego działania biblioteki
+  
+  // same max lentgh as in transmitter section
   uint8_t buf[50];
   uint8_t buflen = 50;
 
@@ -24,7 +33,8 @@ void loop()
     int i;
     for (i = 0; i < buflen; i++) // get the buf
     {
-        Serial.print(char(buf[i])); // print to serial
+      // print to serial converting ASCII code to char
+      Serial.print(char(buf[i]));
     }
     Serial.println();
   }
