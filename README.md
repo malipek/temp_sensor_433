@@ -12,7 +12,12 @@ Project for Arduino hardware for sending temperature and humidity readings via 4
 ### Hardware used
 * Arduino Pro Micro (Arduino Leonardo compatible)
 * DHT22/AM2302 sensor
-* FS1000A 433Mhz transmitter ASK modulation
+* FS1000A 433Mhz transmitter
+
+### External libraries used
+* [VirtualWire](https://www.airspayce.com/mikem/arduino/VirtualWire/)
+* [LowPower](https://github.com/rocketscream/Low-Power.git)
+* [DHT](https://github.com/nettigo/DHT.git)
 
 ### Low energy consumption approach
 Arduino is reading the data form the sensor and transmits results via 433MHz transmitter.
