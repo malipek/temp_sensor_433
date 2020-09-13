@@ -12,15 +12,20 @@ Project for Arduino hardware for sending temperature and humidity readings via 4
 * energy consumption by the receiver is not so important but should be the lowest as possible
 
 ### Hardware used
-* Two Arduino Pro Micro (Arduino Leonardo compatible)
+
+#### Transmitter
+* Arduino Pro Micro (Arduino Leonardo compatible)
 * DHT22/AM2302 sensor
-* 4,7kOhms pull-up resistor
+* 4,7kOhms pull-up resistor for DHT22/AM2302
 * FS1000A 433Mhz transmitter
 * 3xAAA cells box
+
+#### Receiver
+* Arduino Pro Micro (Arduino Leonardo compatible)
 * XLC-RF-5V 433Mhz receiver
 
 ### External libraries used
-* [VirtualWire](https://www.airspayce.com/mikem/arduino/VirtualWire/)
+* [RadioHead](http://www.airspayce.com/mikem/arduino/RadioHead/)
 * [LowPower](https://github.com/rocketscream/Low-Power.git)
 * [DHT](https://github.com/nettigo/DHT.git)
 

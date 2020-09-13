@@ -15,26 +15,35 @@
  * message on serial console in an infinite loop
  */
 
+#include <RH_ASK.h> // https://www.airspayce.com/mikem/arduino/RadioHead/
+#ifdef RH_HAVE_HARDWARE_SPI
+#include <SPI.h> // Not actually used but needed to compile
+#endif
 
-#include <VirtualWire.h> // https://www.airspayce.com/mikem/arduino/VirtualWire/
 #include <LowPower.h> //https://github.com/rocketscream/Low-Power.git  
 #include <DHT.h> // https://github.com/nettigo/DHT.git
 
 #define RADIO 10 // Arduino pin for FS1000A data pin
 #define SLEEP_TIME 200 //how many 8-9 second powerdown states
 #define TEMP 5 // Arduino pin for DHT22/AM2302 data pin
+#define SPEED 1200 // ASK speed
 
 // create global object for DHT22 sensor
 DHT dht(TEMP, DHT22);
 
+// create global object for RH library
+
+// one way, pins 2 and 3 are unused
+RH_ASK driver(SPEED,2,RADIO,3);
+
 void setup()
 {
-    // FS1000A virtual wire setup
-    vw_set_tx_pin(RADIO);
-    vw_setup(2000);
 
     // DHT22 initialisation
     dht.begin();
+    
+    // RH initialisation
+    driver.init();
 }
 
 // measure temp and humidity
@@ -45,10 +54,10 @@ String measure(){
   float h = dht.readHumidity();
   float t = dht.readTemperature();
   if (isnan(t) || isnan(h)) {
-    return ""; 
+    return "";
   }
   else{ 
-    return String("{\"temp\":"+String(t)+",\"hum\":"+String(h)+"}");
+    return "{\"temp\":"+String(t)+",\"hum\":"+String(h)+"}";
   }
 }
 
@@ -60,11 +69,11 @@ void suspend(){
 }
 
 // transmit data
-void transmit(String toSend){
-  char msg[50]; // tworzymy tablicę typu char
-  toSend.toCharArray(msg, toSend.length() + 1); 
-  vw_send((uint8_t *)msg, strlen(msg));
-  vw_wait_tx();
+void transmit(String msg){
+  char char_msg[50];
+  msg.toCharArray(char_msg, msg.length()+1);
+  driver.send((uint8_t *)char_msg, strlen(char_msg));
+  driver.waitPacketSent();
 }
 
 // main loop

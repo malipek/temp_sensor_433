@@ -1,41 +1,37 @@
 /*
- * Arduino receiving data via
- * XLC-RF-5V reciever with VirtualWire protocol.
+ * Arduino Pro Micro receiving data via
+ * XLC-RF-5V reciever.
  * Program must run i a loop, so no delays or putting the uC into
  * any power saving mode is possible.
 */
 
-#include <VirtualWire.h> // https://www.airspayce.com/mikem/arduino/VirtualWire/
+#include <RH_ASK.h> // https://www.airspayce.com/mikem/arduino/RadioHead/
+#ifdef RH_HAVE_HARDWARE_SPI
+#include <SPI.h> // Not actually used but needed to compile
+#endif
 
-#define RADIO 2 // Arduino digital pin for XLC-RF-5V data
+#define RADIO 2 // Arduinio Pro Micro digital pin for XLC-RF-5V data
+#define SPEED 1200 // ASK speed
+
+// one way, pins 3 and 4 are unused
+RH_ASK driver(SPEED,RADIO,3,4);
 
 void setup()
 {
-    // setup serial port
     Serial.begin(9600);
- 
-    // setup VirtualWire library
-    vw_set_rx_pin(RADIO);
-    vw_setup(2000);
-    vw_rx_start(); 
+    driver.init();
 }
 
 void loop()
 {
-  // częśc wymagana do poprawnego działania biblioteki
-  
-  // same max lentgh as in transmitter section
-  uint8_t buf[50];
-  uint8_t buflen = 50;
-
-  if (vw_get_message(buf, &buflen)) //we got sth
+  // buffer for message, max lengt same as on the transmitter's side
+  uint8_t msg[32];
+  uint8_t len;
+  if (driver.recv(msg, &len))
   {
-    int i;
-    for (i = 0; i < buflen; i++) // get the buf
-    {
-      // print to serial converting ASCII code to char
-      Serial.print(char(buf[i]));
-    }
-    Serial.println();
+    short i;
+    for (i=0; i<len; i++)
+      Serial.print( char(msg[i]) );
+    Serial.println();     
   }
 }
